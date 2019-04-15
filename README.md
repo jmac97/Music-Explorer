@@ -2,7 +2,7 @@
 This is my EE551 Engineering Python final project
 
 ## Introduction
-The purpose of this project is to have users experience new music that they wouldn't normally pursue by introducing them to new artists and genres. The user will input a playlist name and their Spotify log-in information. From there, the program will create a Spotify playlist of songs with less than or equal to 150,000 listens. These songs that the program will aggregate will be cross referenced with the user's Spotify data to make sure that the music doesn't match with the users current music taste.
+The purpose of this project is to have users experience new music by introducing them to artists and songs that are similar to their favorite artists. The user will input their Spotify information and their favorite artist. From there, the program will generate similar songs to that artist. The user will then have the oppurtunity to either turn the list of songs into a playlist or make a new list.
 
 ## Architecture Features (Basic Idea)
   * Interface with Spotify API
@@ -14,7 +14,7 @@ The purpose of this project is to have users experience new music that they woul
   * GUI for Spotify and playlist name information
 
 ## To Do (Basic Idea)
-  * Create a user friendly and beautiful GUI
-  * Create an optimal front-end and back-end Python program
+  * Create a user friendly GUI
+  * Create an optimal front-end and back-end program
   * Get Spotify API credentials 
   * Have python program interact/connect with the Spotify API
