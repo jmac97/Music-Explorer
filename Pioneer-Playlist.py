@@ -2,7 +2,6 @@ import spotipy
 import spotipy.util as util
 import config
 
-
 print("Welcome to Pioneer Playlist!\n")
 print(">>> Type 'Start' to begin")
 print(">>> Type anything else to exit the program\n")
@@ -13,7 +12,7 @@ if start == 'Start' or start == 'start':
 
     username = number
 
-    token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id=cID,client_secret=cSecret,redirect_uri='https://www.google.com/')
+    token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id=config.cID,client_secret=config.cSecret,redirect_uri='https://www.google.com/')
     
     spotifyObject = spotipy.Spotify(auth=token)
     spotifyObject.trace = False
