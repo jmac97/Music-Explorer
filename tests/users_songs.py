@@ -1,11 +1,15 @@
+'''
+Tests if code can fetch song Ids of user's top most listened to songs
+Printes recommended list of songs based on above
+Input user ID number for username
+'''
+
 import spotipy
 import spotipy.util as util
 import json
 from json import JSONDecodeError
 
-# User ID: 1224649854
-
-username = '1224649854'
+username = 'X'
 
 token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id='39072f510ea74d4781f2423c61bb4c27',client_secret='82a83ddeb06743e0956bcbb296856412',redirect_uri='https://www.google.com/')
 
@@ -20,7 +24,7 @@ songName = results['items'][0]['name']
 songID = results['items'][0]['id']
 
 topSongs = []
-print("You top artists:")
+print("You top songs:")
 for i, item in enumerate(results['items']):
             topSongs.append(item['artists'][0]['id'])
 
