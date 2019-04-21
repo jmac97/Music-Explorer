@@ -2,213 +2,266 @@ import spotipy
 import spotipy.util as util
 import config
 
+#Initial menus options
 print("Welcome to Pioneer Playlist!\n")
-print(">>> Type 'Start' to begin")
-print(">>> Type anything else to exit the program\n")
-start = input("Your input: ")
 
-if start == 'Start' or start == 'start':
-    number = input("Enter your user ID: ")
+#Get's user's ID number
+number = input("Enter your user ID: ")
+username = number
 
-    username = number
+#Create token 
+token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id=config.cID,client_secret=config.cSecret,redirect_uri='https://www.google.com/')
 
-    token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id=config.cID,client_secret=config.cSecret,redirect_uri='https://www.google.com/')
+#Create Spotify object
+spotifyObject = spotipy.Spotify(auth=token)
+spotifyObject.trace = False
+
+#Get user's name
+user = spotifyObject.current_user()
+displayName = user['display_name']
+
+#Print user's name
+print("\n\nHi " + displayName + "!")
+print("Let's create a playlist based on one of the below.\n")
+
+while True:
+    #Second menu
+    print("Enter the number of one of the menu choices:")
+    print("  >>> 1: Search for a song")
+    print("  >>> 2. Search for an artist")
+    print("  >>> 3. Search for a genre")
+    print("  >>> 4. Your top songs")
+    print("  >>> 5. Your top artists")
+    print("  >>> 6. Exit program")
+    choice = input("Your choice: ")
     
-    spotifyObject = spotipy.Spotify(auth=token)
-    spotifyObject.trace = False
+    #Search for a song
+    if choice == '1':
+        #Gets user's song search and searches Spotify for that name
+        choice = input("Enter a name of a song: ")
+        searchResults = spotifyObject.search(choice,1,0,"track")
 
-    user = spotifyObject.current_user()
+        #Gets the name of the artist
+        artist = searchResults['tracks']['items'][0]['artists'][0]['name']
+        #Gets the song name
+        song = searchResults['tracks']['items'][0]['name']
+        #Gets the song ID
+        songID = searchResults['tracks']['items'][0]['id']
 
-    displayName = user['display_name']
-
-    while True:
-        print("\n\nWelcome " + displayName + "!")
-        print("We'll now create a playlist based on one of the below.")
-        print("Enter the number of one of the menu choices:")
-        print("  >>> 1: Search for a song")
-        print("  >>> 2. Search for an artist")
-        print("  >>> 3. Search for a genre")
-        print("  >>> 4. Your top songs")
-        print("  >>> 5. Your top artists\n")
-        choice = input("Your choice: ")
-
-        if choice == 'close program' or choice == 'Close Program' or choice == 'close Program' or choice == 'Close program':
-            print()
-            print("Goodbye!")
-            break
+        #Prints Name - Artist
+        print("\n\nYour serarch request: " + song, ' - ', artist,"\n")
         
-        if choice == '1':
-            choice = input("Enter a name of a song: ")
-            searchResults = spotifyObject.search(choice,1,0,"track")
+        #Gets list of song recommendations and prints the list
+        recs = spotifyObject.recommendations(seed_tracks=[songID])
+        allRecs = []
+        print("List of recommended songs based on your request:")
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        recs = spotifyObject.recommendations(seed_tracks=[songID])
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+    
+        #Third menu 
+        print("\nWould you like to make this a playlist?")
+        print("Type 'Yes' or 'No'\n")
+        answer = input("Your choice: ")
 
-            artist = searchResults['tracks']['items'][0]['artists'][0]['name']
-            song = searchResults['tracks']['items'][0]['name']
-            songID = searchResults['tracks']['items'][0]['id']
+        if answer == 'Yes' or answer == 'yes':
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
 
-            print("\n\nYour serarch request: " + song, ' - ', artist,"\n")
-
-            recs = spotifyObject.recommendations(seed_tracks=[songID])
-            allRecs = []
-            print("List of recommended songs based on your request:")
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            recs = spotifyObject.recommendations(seed_tracks=[songID])
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-        
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' or 'No'\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                name = input("Enter a name for the playlist: ")
-                print("Please wait...")
-
-                playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
-                for track in allRecs:
-                    add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
-                
-                print("Check your Spotify account for your new playlist!")
-        
-        if choice == '2':
-            choice = input("Enter name of an artist: ")
-            searchResults = spotifyObject.search(choice,1,0,"artist")
-            artist = searchResults['artists']['items'][0]
-
-            print("\n\nYour serarch request: " + artist['name'])
-            print("They have " + str(artist['followers']['total']) + " followers")
-            print("Their styles are: " + artist['genres'][0] + ", " + artist['genres'][1] + ", and " + artist['genres'][2] + '\n')
-            
-            recs = spotifyObject.recommendations(seed_artists=[artist['id']])
-            allRecs = []
-            print("List of recommended songs based on your request:")
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            recs = spotifyObject.recommendations(seed_artists=[artist['id']])
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-        
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' or 'No'\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                name = input("Enter a name for the playlist: ")
-                print("Please wait...")
-                playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
-                for track in allRecs:
-                    add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
-            
-            print("Check your Spotify account for your new playlist!")
-        
-        if choice == '3':
-            print("\nHere are the possible genres to search for: ")
-            gdict =  spotifyObject.recommendation_genre_seeds()
-
-            genres = list(gdict.values())
-            ugh = genres[0]
-
-            for i in ugh:
-                print(i)
-            
-            print()
-            print("Enter up to five of the above genres, seperating by commas")
-            genreChoice = input("Your choice: ")
-
-            recs = spotifyObject.recommendations(seed_genres=[genreChoice])
-            allRecs = []
-            print("\nList of recommended songs based on your request:")
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            recs = spotifyObject.recommendations(seed_genres=[genreChoice])
-            for track in recs['tracks']:
-                allRecs.append(track['id'])
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' or 'No'\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                name = input("Enter a name for the playlist: ")
-                print("Please wait...")
-                playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
-                for track in allRecs:
-                    add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
-            
-            print("Check your Spotify account for your new playlist!")
-        
-        if choice == '4':
-            results = spotifyObject.current_user_top_tracks(5)
-
-            songName = results['items'][0]['name']
-            songID = results['items'][0]['id']
-
-            topSongs = []
-
-            print("\n\nYour top five songs:")
-            for i, item in enumerate(results['items']):
-                topSongs.append(item['artists'][0]['id'])
-                print("  >>>", item['name'], ' - ', item['artists'][0]['name'])
-            
-            print()
-            recs = spotifyObject.recommendations(seed_tracks=[topSongs[0],topSongs[1],topSongs[2],topSongs[3],topSongs[4]])
-            print("List of recommended songs based on your top songs:")
-            for track in recs['tracks']:
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            recs = spotifyObject.recommendations(seed_artists=[topSongs[0],topSongs[1],topSongs[2],topSongs[3],topSongs[4]])
-            for track in recs['tracks']:
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' or 'No'\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                name = input("Enter a name for the playlist: ")
-                print("Please wait...")
-                playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
-                for track in recs['tracks']:
-                    add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track['id']], position=None)
-            
-            print("Check your Spotify account for your new playlist!")
-        
-        if choice == '5':
-            results = spotifyObject.current_user_top_artists(limit=5)
-
-            topArtists = []
-
-            print("\nList of your top artists:")
-            for item in results['items']:
-                topArtists.append(item['id'])
-                print("  >>>", item['name'])
-            
-            recs = spotifyObject.recommendations(seed_artists=[topArtists[0],topArtists[1],topArtists[2],topArtists[3],topArtists[4]])
-            print("List of recommended songs based on your request:")
-            for track in recs['tracks']:
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            recs = spotifyObject.recommendations(seed_artists=[topArtists[0],topArtists[1],topArtists[2],topArtists[3],topArtists[4]])
-            for track in recs['tracks']:
-                print("  >>>", track['name'], '-', track['artists'][0]['name'])
-            
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' or 'No'\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                name = input("Enter a name for the playlist: ")
-                print("Please wait...")
-                playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
-                for track in recs['tracks']:
-                    add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track['id']], position=None)
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in allRecs:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
             
             print("Check your Spotify account for your new playlist!")
     
+    #Search for an artist
+    if choice == '2':
+        #Gets user's artist search and searches Spotify for that name
+        choice = input("Enter name of an artist: ")
+        searchResults = spotifyObject.search(choice,1,0,"artist")
+        
+        #Gets artist base information
+        artist = searchResults['artists']['items'][0]
+
+        #Prints artist's name
+        print("\n\nYour serarch request: " + artist['name'])
+        #Printes the followers of the artist
+        print("They have " + str(artist['followers']['total']) + " followers")
+        #Lists three of the artist's styles
+        print("Their styles are: " + artist['genres'][0] + ", " + artist['genres'][1] + ", and " + artist['genres'][2] + '\n')
+        
+        #Gets list of song recommendations and prints the list
+        recs = spotifyObject.recommendations(seed_artists=[artist['id']])
+        allRecs = []
+        print("List of recommended songs based on your request:")
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        recs = spotifyObject.recommendations(seed_artists=[artist['id']])
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+    
+        #Third menu
+        print("\nWould you like to make this a playlist?")
+        print("Type 'Yes' or 'No'\n")
+        answer = input("Your choice: ")
+
+        if answer == 'Yes' or answer == 'yes':
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
+
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in allRecs:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
+        
+        print("Check your Spotify account for your new playlist!")
+    
+    #Search for genre
+    if choice == '3':
+        #Prints list of available genres for API
+        print("\nHere are the possible genres to search for: ")
+        gdict =  spotifyObject.recommendation_genre_seeds()
+
+        #Gets the genre values from dictionary
+        genres = list(gdict.values())
+        name = genres[0]
+
+        #Prints items in dictionary, aka genres
+        for i in name:
+            print(i)
+        
+        print()
+        print("Enter up to five of the above genres, seperating by commas")
+        genreChoice = input("Your choice: ")
+
+        #Gets list of song recommendations and prints the list
+        recs = spotifyObject.recommendations(seed_genres=[genreChoice])
+        allRecs = []
+        print("\nList of recommended songs based on your request:")
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        recs = spotifyObject.recommendations(seed_genres=[genreChoice])
+        for track in recs['tracks']:
+            allRecs.append(track['id'])
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        
+        #Third menu
+        print("\nWould you like to make this a playlist?")
+        print("Type 'Yes' or 'No'\n")
+        answer = input("Your choice: ")
+
+        if answer == 'Yes' or answer == 'yes':
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
+
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in allRecs:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
+        
+        print("Check your Spotify account for your new playlist!")
+    
+    #Based on user's top tracks
+    if choice == '4':
+        #Gets user's top five songs
+        results = spotifyObject.current_user_top_tracks(5)
+
+        #Gets song names
+        songName = results['items'][0]['name']
+        #Gets song IDs
+        songID = results['items'][0]['id']
+        topSongs = []
+
+        #Prints song Name - Artist
+        print("\n\nYour top five songs:")
+        for i, item in enumerate(results['items']):
+            topSongs.append(item['artists'][0]['id'])
+            print("  >>>", item['name'], ' - ', item['artists'][0]['name'])
+        
+        print()
+
+        #Gets list of song recommendations and prints the list
+        recs = spotifyObject.recommendations(seed_tracks=[topSongs[0],topSongs[1],topSongs[2],topSongs[3],topSongs[4]])
+        print("List of recommended songs based on your top songs:")
+        for track in recs['tracks']:
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        recs = spotifyObject.recommendations(seed_artists=[topSongs[0],topSongs[1],topSongs[2],topSongs[3],topSongs[4]])
+        for track in recs['tracks']:
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        
+        #Third menu
+        print("\nWould you like to make this a playlist?")
+        print("Type 'Yes' or 'No'\n")
+        answer = input("Your choice: ")
+
+        if answer == 'Yes' or answer == 'yes':
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
+
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in recs['tracks']:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track['id']], position=None)
+        
+        print("Check your Spotify account for your new playlist!")
+    
+    #Based on user's top artists
+    if choice == '5':
+        #Gets users top 5 artists
+        results = spotifyObject.current_user_top_artists(limit=5)
+        topArtists = []
+
+        #Prints and stores user's artists info
+        print("\nList of your top artists:")
+        for item in results['items']:
+            topArtists.append(item['id'])
+            print("  >>>", item['name'])
+        
+        #Gets list of song recommendations and prints the list
+        recs = spotifyObject.recommendations(seed_artists=[topArtists[0],topArtists[1],topArtists[2],topArtists[3],topArtists[4]])
+        print("List of recommended songs based on your request:")
+        for track in recs['tracks']:
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        recs = spotifyObject.recommendations(seed_artists=[topArtists[0],topArtists[1],topArtists[2],topArtists[3],topArtists[4]])
+        for track in recs['tracks']:
+            print("  >>>", track['name'], '-', track['artists'][0]['name'])
+        
+        #Third menu
+        print("\nWould you like to make this a playlist?")
+        print("Type 'Yes' or 'No'\n")
+        answer = input("Your choice: ")
+
+        if answer == 'Yes' or answer == 'yes':
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
+
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in recs['tracks']:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track['id']], position=None)
+        
+        print("Check your Spotify account for your new playlist!")
+    
+    #Closes program
+    if choice == '6':
+        print()
+        print("Goodbye!")
+        break
+        
+#Closes program
 else:
     print()
     print("Goodbye!")
