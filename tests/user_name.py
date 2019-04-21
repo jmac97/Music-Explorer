@@ -1,10 +1,11 @@
+'''
+Tests fetching user id and necessary API credentials
+Tests if username will be displayed
+'''
+
 import spotipy
-import os
 import sys
-import json
-import webbrowser
 import spotipy.util as util
-from json.decoder import JSONDecodeError
 
 username = sys.argv[1]
 
