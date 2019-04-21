@@ -1,8 +1,12 @@
 import spotipy
 import spotipy.util as util
-import genres
 
-# User ID: 1224649854
+'''
+This code tests:
+    -if the user can input their ID number and the code returns the correct user info
+    -if the token is set up properly
+    -if a playlist can be made using the Spotify API
+'''
 
 print("Welcome to Pioneer Playlist!")
 print()
@@ -11,8 +15,6 @@ print()
 print(">>> Type anything else to exit the program")
 print()
 start = input("Your input: ")
-
-
 
 if start == 'start':
     print()
@@ -58,11 +60,6 @@ if start == 'start':
         print()
         print("List of different songs based on your request:")
         
-        genreData = artist['genres']
-        other = list(set(allGenres) - set(genreData))
-        print(other)
-        print(genreData)
-        
         
         print()
         print("Would you like to make this a playlist?")
@@ -77,7 +74,6 @@ if start == 'start':
             for track in recs['tracks']:
                 add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track['id']], position=None)
 
-    
 else:
     print()
     print("Goodbye!")
