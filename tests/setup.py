@@ -1,6 +1,3 @@
-import spotipy
-import spotipy.util as util
-
 '''
 Initial/basic setup of code test
 This code tests:
@@ -8,6 +5,9 @@ This code tests:
     -if the token is set up properly
     -if a playlist can be made using the Spotify API
 '''
+
+import spotipy
+import spotipy.util as util
 
 print("Welcome to Pioneer Playlist!")
 print()
