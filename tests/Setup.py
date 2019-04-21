@@ -2,6 +2,7 @@ import spotipy
 import spotipy.util as util
 
 '''
+Initial/basic setup of code test
 This code tests:
     -if the user can input their ID number and the code returns the correct user info
     -if the token is set up properly
