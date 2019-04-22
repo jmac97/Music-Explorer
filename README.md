@@ -24,10 +24,8 @@ The program will ask you to input your Spotify user id. To acquire this:
       * Scrap music information
       * Scrap user music taste information
   * Python file that stores song information
-  * GUI for Spotify and playlist name information
 
 ## To Do (Basic Idea)
-  * Create a user friendly GUI
-  * Create an optimal front-end and back-end program
+  * Create an optimal program
   * Get Spotify API credentials 
   * Have python program interact/connect with the Spotify API
