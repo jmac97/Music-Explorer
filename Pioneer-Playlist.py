@@ -269,7 +269,7 @@ while True:
             print("Please wait...")
 
             #Creates playlist based on that name and populates the playlist
-            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            playlists = spotifyObject.user_playlist_create(username, name, public=True)
             for track in allRecs:
                 add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
         
