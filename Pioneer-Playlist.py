@@ -264,8 +264,17 @@ while True:
         answer = input("Your choice: ")
 
         if answer == 'Yes' or answer == 'yes':
-            #Names, creates, and populates playlist
-            recom.playlist(username, spotifyObject, allRecs)
+            #Get's name of playlist
+            name = input("Enter a name for the playlist: ")
+            print("Please wait...")
+
+            #Creates playlist based on that name and populates the playlist
+            playlists = spotifyObject.user_playlist_create(username, name, public=True, description="Recommended Songs")
+            for track in allRecs:
+                add = spotifyObject.user_playlist_add_tracks(username, playlists['id'], [track], position=None)
+        
+        print("Check your Spotify account for your new playlist!")
+        
     #Closes program
     if choice == '7':
         print()
