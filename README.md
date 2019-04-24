@@ -13,21 +13,9 @@ The purpose of this project is to have users experience new music by introducing
 The program will ask you to input your Spotify user id. If you have a Spotify account that *is* linked to Facebook, following these steps. Otherwise, you can use your actual username. There are two ways to acquire your ID number:
  You can go to this link to get your device username: https://www.spotify.com/au/account/set-device-password/
  Or:
-  1. Open Spotify
+  1. Open Spotify through the actual program, not the web player
   2. Click your username in the top right corner
   3. Click on the bubble with "..." under your name/username
   4. Click "Share"
   5. Click "Copy Profile Link"
   6. Paste this link somewhere. Your Spotify ID number is the 10 digit number after "user/"
-
-## Architecture Features (Basic Idea)
-  * Interface with Spotify API
-      * Log-in information
-      * Scrap music information
-      * Scrap user music taste information
-  * Python file that stores song information
-
-## To Do (Basic Idea)
-  * Create an optimal program
-  * Get Spotify API credentials 
-  * Have python program interact/connect with the Spotify API
