@@ -10,7 +10,7 @@ The purpose of this project is to have users experience new music by introducing
 3. install spotipy (pip install git+https://github.com/plamere/spotipy.git --upgrade)
 
 ## What's My Spotify User ID?
-The program will ask you to input your Spotify user id. If you have a Spotify account that /is/ linked to Facebook, following these steps. Otherwise, you can use your actual username. There are two ways to acquire your ID number:
+The program will ask you to input your Spotify user id. If you have a Spotify account that *is* linked to Facebook, following these steps. Otherwise, you can use your actual username. There are two ways to acquire your ID number:
  You can go to this link to get your device username: https://www.spotify.com/au/account/set-device-password/
  Or:
   1. Open Spotify
