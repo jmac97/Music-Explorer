@@ -18,24 +18,18 @@ def getRecs(self, sp, type, list):
     recs = []
 
     if type == 'song':
-        recs = sp.recommendations(seed_tracks=[self])
+        recs = sp.recommendations(seed_tracks=[self], limit=100)
         callOut()
-        printRecs(recs, list)
-        recs = sp.recommendations(seed_tracks=[self])
         printRecs(recs, list)
 
     if type == 'artist':
-        recs = sp.recommendations(seed_artists=[self])
+        recs = sp.recommendations(seed_artists=[self], limit=100)
         callOut()
-        printRecs(recs, list)
-        recs = sp.recommendations(seed_artists=[self])
         printRecs(recs, list)
 
     if type == 'genre':
-        recs = sp.recommendations(seed_genres=[self])
+        recs = sp.recommendations(seed_genres=[self], limit=100)
         callOut()
-        printRecs(recs, list)
-        recs = sp.recommendations(seed_artists=[self])
         printRecs(recs, list)
 
 #Creates and populates a playlist
