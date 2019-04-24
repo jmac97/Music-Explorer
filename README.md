@@ -7,16 +7,18 @@ The purpose of this project is to have users experience new music by introducing
 ## Steps to Take Before Running Pionee-Playlist:
 1. Have a Spotify account and know your user ID (see below if you don't know)
 2. git clone the repo
-3. install spotipy (pip install spotipy)
+3. install spotipy (pip install git+https://github.com/plamere/spotipy.git --upgrade)
 
 ## What's My Spotify User ID?
-The program will ask you to input your Spotify user id. To acquire this:
- 1. Open Spotify
- 2. Click your username in the top right corner
- 3. Click on the bubble with "..." under your name/username
- 4. Click "Share"
- 5. Click "Copy Profile Link"
- 6. Paste this link somewhere. Your Spotify ID number is the 10 digit number after "user/"
+The program will ask you to input your Spotify user id. If you have a Spotify account that /is/ linked to Facebook, following these steps. Otherwise, you can use your actual username. There are two ways to acquire your ID number:
+ You can go to this link to get your device username: https://www.spotify.com/au/account/set-device-password/
+ Or:
+  1. Open Spotify
+  2. Click your username in the top right corner
+  3. Click on the bubble with "..." under your name/username
+  4. Click "Share"
+  5. Click "Copy Profile Link"
+  6. Paste this link somewhere. Your Spotify ID number is the 10 digit number after "user/"
 
 ## Architecture Features (Basic Idea)
   * Interface with Spotify API
