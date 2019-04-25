@@ -13,15 +13,17 @@ print("\n\nWelcome to Pioneer Playlist!\n")
 print("If you have a Facebook linked acccount, enter your Spotify ID number.")
 print("If you don't know how to acquire this, see the readme.md")
 print("Otherwise, enter your username.")
+
 number = input("\nEnter your information: ")
 username = number
 
 #Create token 
 token = util.prompt_for_user_token(username, scope='playlist-modify-private,playlist-modify-public,user-top-read', client_id=config.cID,client_secret=config.cSecret,redirect_uri='https://www.google.com/')
+print(token)
 
 #Create Spotify object
 spotifyObject = spotipy.Spotify(auth=token)
-spotifyObject.trace = False
+#spotifyObject.trace = False
 
 #Get user's name
 user = spotifyObject.current_user()
@@ -49,35 +51,40 @@ while True:
             #Gets user's song search and searches Spotify for that name
             choice = input("Enter a name of a song: ")
             searchResults = spotifyObject.search(choice,1,0,"track")
-
-            #Gets the name of the artist
-            artist = searchResults['tracks']['items'][0]['artists'][0]['name']
-            #Gets the song name
-            song = searchResults['tracks']['items'][0]['name']
-            #Gets the song ID
-            songID = searchResults['tracks']['items'][0]['id']
-
-            #Prints Name - Artist
-            print("\n\nYour serarch request: " + song, ' - ', artist,"\n")
-
-            #Gets list of song recommendations and prints the list
-            allRecs = []
-            recom.getRecs(songID, spotifyObject, 'song', allRecs) 
-        
-            #Third menu 
-            print("\nWould you like to make this a playlist?")
-            print("Type 'Yes' to make a playlist, anyting else will pass this option.\n")
-            answer = input("Your choice: ")
-
-            if answer == 'Yes' or answer == 'yes':
-                #Names, creates, and populates playlist
-                recom.playlist(username, spotifyObject, allRecs)
             
-            print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            if len(searchResults['tracks']['items']) == 0:
+                print("Song not found.")
 
-            if redo == 'Menu' or redo == 'menu':
-                break
+            else:
+                #Gets the name of the artist
+                artist = searchResults['tracks']['items'][0]['artists'][0]['name']
+
+                #Gets the song name
+                song = searchResults['tracks']['items'][0]['name']
+                #Gets the song ID
+                songID = searchResults['tracks']['items'][0]['id']
+
+                #Prints Name - Artist
+                print("\n\nYour serarch request: " + song, ' - ', artist,"\n")
+
+                #Gets list of song recommendations and prints the list
+                allRecs = []
+                recom.getRecs(songID, spotifyObject, 'song', allRecs)
+            
+                #Third menu 
+                print("\nWould you like to make this a playlist?")
+                print("Type 'Yes' to make a playlist, anyting else will pass this option.\n")
+                answer = input("Your choice: ")
+
+                if answer == 'Yes' or answer == 'yes':
+                    #Names, creates, and populates playlist
+                    recom.playlist(username, spotifyObject, allRecs)
+                
+                print("\nWould you like to generate another one or return to the main menu?")
+                redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
+
+                if redo == 'Menu' or redo == 'menu':
+                    break
     
     #Search for an artist
     if choice == '2':
@@ -85,6 +92,9 @@ while True:
             #Gets user's artist search and searches Spotify for that name
             choice = input("Enter name of an artist: ")
             searchResults = spotifyObject.search(choice,1,0,"artist")
+
+            if len(searchResults['tracks']['items']) == 0:
+                print("Artist not found.")
             
             #Gets artist base information
             artist = searchResults['artists']['items'][0]
@@ -110,7 +120,7 @@ while True:
                 recom.playlist(username, spotifyObject, allRecs)
             
             print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
 
             if redo == 'Menu' or redo == 'menu':
                 break
@@ -125,13 +135,35 @@ while True:
             #Gets the genre values from dictionary
             genres = list(gdict.values())
             name = genres[0]
+            names = []
 
             #Prints items in dictionary, aka genres
             for i in name:
                 print(i)
+                names.append(i)
             
-            print("\nEnter UP TO FIVE of the above genres, seperating each by commas")
-            genreChoice = input("Your choice: ")
+            def getGenres():
+                while True:
+                    print("\nEnter UP TO FIVE of the above genres, seperating each by commas")
+                    genreChoice = input("Your choice: ")
+                    genreChoice.replace(" ", "")
+                    items = genreChoice.split(',')
+                    total = []
+
+                    for x in items:
+                        x.replace(",", "")
+                        total.append("".join(x.split()))
+
+                    if len(total) >= 6:
+                        print("That's too many generes!")
+
+                    else:
+                        if all(x in names for x in total):
+                            return genreChoice
+                        else:
+                            print("Genre(s) not valid, check your list.")
+            
+            genreChoice = getGenres()
 
             #Gets list of song recommendations and prints the list
             recs = spotifyObject.recommendations(seed_genres=[genreChoice], limit=100)
@@ -159,7 +191,7 @@ while True:
                 print("Check your Spotify account for your new playlist!")
             
             print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
 
             if redo == 'Menu' or redo == 'menu':
                 break
@@ -208,7 +240,7 @@ while True:
                 print("Check your Spotify account for your new playlist!")
             
             print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
 
             if redo == 'Menu' or redo == 'menu':
                 break
@@ -251,7 +283,7 @@ while True:
                 print("Check your Spotify account for your new playlist!")
             
             print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
 
             if redo == 'Menu' or redo == 'menu':
                 break
@@ -303,7 +335,7 @@ while True:
                 print("Check your Spotify account for your new playlist!")
             
             print("\nWould you like to generate another one or return to the main menu?")
-            redo = input("Enter 'Menu' to return, anything else will generate a song: ")
+            redo = input("Enter 'Menu' to return, anything else will restart this funcion: ")
 
             if redo == 'Menu' or redo == 'menu':
                 break
@@ -313,8 +345,3 @@ while True:
         print()
         print("Goodbye!")
         break
-        
-#Closes program
-else:
-    print()
-    print("Goodbye!")
