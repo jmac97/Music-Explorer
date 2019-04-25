@@ -3,7 +3,6 @@ import spotipy.util as util
 import config
 import random
 
-
 #Gets and returns search results
 ##object: Spotify object
 ##type: What is the user searching for e.g. song, artist, etc? Options: track, artist
@@ -38,16 +37,19 @@ def getRecs(item, sp, type, list):
     if type == 'song':
         recs = sp.recommendations(seed_tracks=[item], limit=100)
         printRecs(recs, list)
+        return True
 
     #Gets recommendations from artists
     if type == 'artist':
         recs = sp.recommendations(seed_artists=[item], limit=100)
         printRecs(recs, list)
+        return True
 
     #Gets recommendations from genres
     if type == 'genre':
         recs = sp.recommendations(seed_genres=[item], limit=100)
         printRecs(recs, list)
+        return True
     
 
 #Creates and populates a playlist
@@ -76,7 +78,7 @@ def playlist(username, sp, list):
 
 
 #Gets and prints list of all possible genres, returns list of genres that user chose
-##list: list of genre inputs by user
+##list: list of all genre seeds
 def getGenres(list):
     while True:
         print("\nEnter UP TO FIVE of the above genres, seperating each by commas")
@@ -93,6 +95,7 @@ def getGenres(list):
         #Sees if user inputted too many genres
         if len(total) >= 6:
             print("That's too many generes!")
+            return 1
 
         #Sees if user inputted genre(s) is within the list of available genres
         else:
@@ -100,6 +103,7 @@ def getGenres(list):
                 return genreChoice
             else:
                 print("Genre(s) not valid, check your list.")
+                return 2
 
 
 #Class that acquires user information
@@ -235,6 +239,10 @@ class MainMenu:
                 names.append(i)
             
             genreChoice = getGenres(names)
+
+            #Added for unittest
+            while genreChoice == 1 or genreChoice == 2:
+                genreChoice = getGenres(names)
 
             return genreChoice
     
