@@ -9,6 +9,7 @@ This program was made using Spotipy, a python library for the Spotify Web API: h
 1. Have a Spotify account and know your user ID (see below if you don't know)
 2. git clone the repo
 3. install spotipy (pip install git+https://github.com/plamere/spotipy.git --upgrade)
+4. if step 3 doesn't work, try python3 -m pip install spotipy
 
 ## What's My Spotify User ID?
 The program will ask you to input your Spotify user id. If you have a Spotify account that *is* linked to Facebook, following these steps. Otherwise, you can use your actual username. There are two ways to acquire your ID number:
