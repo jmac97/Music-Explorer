@@ -1,7 +1,7 @@
 # Pioneer Playlist
 
 ## Introduction
-The purpose of this project is to have users experience new music by introducing them to artists and songs. The user will input their Spotify information and then will be able to chose from a menu how they would like to generate a new playlist for them to listen to. From there, the program will generate similar songs to the inputted artist, song, genre, or from the users top songs or artists. The user will then have the oppurtunity to either turn the list of songs into a playlist or generate a new list. Some more information can be found [here](https://mceldoon.wixsite.com/juliem/copy-of-free-form-guitar-pedal).
+The purpose of this project is to have users experience new music by introducing them to artists and songs. The user will input their Spotify information and then will be able to chose from a menu how they would like to generate a new playlist for them to listen to. From there, the program will generate similar songs to the inputted artist, song, genre, or from the users top songs or artists. The user will then have the oppurtunity to either turn the list of songs into a playlist or generate a new list.
 
 This program was made using Spotipy, a python library for the Spotify Web API: https://spotipy.readthedocs.io/en/latest/#
 
