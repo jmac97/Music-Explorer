@@ -5,7 +5,7 @@ The purpose of this project is to have users experience new music by introducing
 
 This program was made using Spotipy, a python library for the Spotify Web API: https://spotipy.readthedocs.io/en/latest/#
 
-## Steps to Take Before Running Pionee-Playlist:
+## Steps to Take Before Running Pioneer-Playlist:
 1. Have a Spotify account and know your user ID (see below if you don't know)
 2. git clone the repo
 3. install spotipy (pip install git+https://github.com/plamere/spotipy.git --upgrade)
